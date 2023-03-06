@@ -3,7 +3,7 @@ name: Deploy PHP app to EC2 instances in Autoscaling
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
