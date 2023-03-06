@@ -29,4 +29,4 @@ jobs:
         deployment-group-name: CodeDeployGroupName
         deployment-config-name: CodeDeployDefault.OneAtATime
         aws-region: us-east-1
-        appspec-file: appspec.yaml
+        appspec-file: appspec.yml
