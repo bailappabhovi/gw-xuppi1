@@ -1,0 +1,32 @@
+name: Deploy PHP app to EC2 instances in Autoscaling
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Install dependencies
+      run: composer install
+    - name: Build app
+      run: |
+        composer run build
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+    - name: Deploy to Autoscaling Group
+      uses: aws-actions/amazon-ec2-autoscaling-deploy@v1
+      with:
+        application-name: CodeDeployAppNameWithASG
+        deployment-group-name: CodeDeployGroupName
+        deployment-config-name: CodeDeployDefault.OneAtATime
+        aws-region: us-east-1
+        appspec-file: appspec.yaml
